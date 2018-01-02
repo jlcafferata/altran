@@ -1,11 +1,15 @@
-.card{
-	width: 18rem; 
-	margin: 5px;
-}
-
 .card-img-top{
 	width: 100%;
     height: 200px;
+}
+
+.imgGrid{
+	height: 40px;
+	width: 40px;
+}
+
+.li-detail{
+   line-height: 10px;
 }
 * {
 	font-family: 'Amaranth', sans-serif;

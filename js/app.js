@@ -46,7 +46,8 @@ angular.module('brastlewarkApp', [, 'ui.bootstrap.modal', 'ui.bootstrap', 'dataG
             getData: function () {
                 return $http({
                     method: 'GET',
-                    url: 'https://raw.githubusercontent.com/rrafols/mobile_test/master/data.json'
+                    url: 'https://raw.githubusercontent.com/rrafols/mobile_test/master/data.json',
+                    cache: true
                 });
             }
         }

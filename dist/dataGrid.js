@@ -242,10 +242,9 @@
 
             function applyFilters() {
                 var time = Date.now(), sorted = false;
-
                 //TO REMOVE ?
                 $scope._time = {};
-                //console.log('applyfilters');
+               
                 if ($scope.sortOptions.predicate && $scope.sortCache && $scope.sortCache.predicate === $scope.sortOptions.predicate
                     && $scope.sortCache.direction === $scope.sortOptions.direction) {
                     $scope.filtered = $scope.sortCache.data.slice();
@@ -378,7 +377,7 @@
         .factory('filtersFactory', function () {
             function selectFilter(items, value, predicate) {
                 return items.filter(function (item) {
-                    return value && item[predicate] ? item[predicate] === value : true;
+                    return value && item[predicate] ? (item[predicate] === value || item[predicate].indexOf(value)>0) : true;
                 });
             }
 
