@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Brastlewark</title>
+    
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/angular-data-grid.bootstrap.css">
+
+	<link href="https://fonts.googleapis.com/css?family=MedievalSharp" rel="stylesheet"> 
+	
+</head>
+<body ng-app="brastlewarkApp" ng-controller="brastlewarkAppController" ng-cloak>
+<div class="container">
+    <div class="row">
+        <div>
+       		<h1>Brastlewark</h1>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="orderIdFilter">Search by name</label>
+                    <input id="orderIdFilter" type="text" class="form-control order-search-box"
+                           placeholder="Enter search name"
+                           ng-change="gridActions.filter()"
+                           ng-model="name"
+                           filter-by="name"
+                           filter-type="text">
+                </div>
+            </div>  
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="orderIdFilter">Search by profession</label>
+                    <select name="profession" 
+                            ng-options="profession for profession in professions[0]" 
+                            ng-required="true"
+                            ng-change="gridActions.filter()"
+                            ng-model="profession"
+                            filter-by="profession">
+                    </select>
+                </div>
+            </div>             
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-md-12">
+            <div grid-data id='test' grid-options="gridOptions" grid-actions="gridActions">
+                <div class="row">
+                    <div class="col-md-3">
+                        <span class="items">{{filtered.length}} people stored</span>
+                    </div>
+                    <div class="col-md-9 text-right">
+                        <form class="form-inline pull-right margin-bottom-basic">
+                            <div class="form-group">
+                                <grid-pagination max-size="5"
+                                                 boundary-links="true"
+                                                 class="pagination-sm"
+                                                 total-items="paginationOptions.totalItems"
+                                                 ng-model="paginationOptions.currentPage"
+                                                 ng-change="reloadGrid()"
+                                                 items-per-page="paginationOptions.itemsPerPage"></grid-pagination>
+                            </div>
+                            <div class="form-group items-per-page">
+                                <label for="itemsOnPageSelect1">Items per page:</label>
+                                <select id="itemsOnPageSelect1" class="form-control input-sm"
+                                        ng-init="paginationOptions.itemsPerPage = '10'"
+                                        ng-model="paginationOptions.itemsPerPage" ng-change="reloadGrid()">
+                                    <option>10</option>
+                                    <option>25</option>
+                                    <option>50</option>
+                                    <option>75</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <table class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <th sortable="code">
+                           Avatar
+                        </th>
+                        <th sortable="name" class="sortable">
+                            Name
+                        </th>
+                        <th sortable="age" class="sortable">
+                            Age
+                        </th>
+                        <th sortable='professions.length' class="sortable">
+                            Qualified
+                        </th>
+                        <th sortable='friends.length' class="sortable">
+                            Popularity
+                        </th>
+                        <th>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr grid-item>
+                        <td width="5%">
+                        	<img ng-src="{{item.thumbnail}}" width="40px" height="40px"/>
+                        </td>
+                        <td width="30%" ng-bind="item.name"></td>
+                        <td ng-bind="item.age"></td>
+                        <td>{{item.professions.length}} professions</td>
+                        <td>{{item.friends.length}} friends</td>
+                        <td><button class="btn btn-link"
+                            ng-click="open(item)">More details</button></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <form class="form-inline pull-right margin-bottom-basic">
+                    <div class="form-group">
+                        <grid-pagination max-size="5"
+                                         boundary-links="true"
+                                         class="pagination-sm"
+                                         total-items="paginationOptions.totalItems"
+                                         ng-model="paginationOptions.currentPage"
+                                         ng-change="reloadGrid()"
+                                         items-per-page="paginationOptions.itemsPerPage"></grid-pagination>
+                    </div>
+                    <div class="form-group items-per-page">
+                        <label for="itemsOnPageSelect2">Items per page:</label>
+                        <select id="itemsOnPageSelect2" class="form-control input-sm"
+                                ng-init="paginationOptions.itemsPerPage = '10'"
+                                ng-model="paginationOptions.itemsPerPage" ng-change="reloadGrid()">
+                            <option>10</option>
+                            <option>25</option>
+                            <option>50</option>
+                            <option>75</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div modal="showModal" close="cancel()">
+	    <div class="modal-header">
+           <div class="row">
+                <div class="col-md-4">
+                    <img class="card-img-top" ng-src="{{profile.thumbnail}}" alt="{{profile.name}}">
+                </div>
+                <div class="col-md-8">
+                    <h2>{{profile.name}}</h2>
+                   <blockquote>Profile details</blockquote>
+                </div>
+            </div>           
+        </div> 
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <blockquote>Age: <div ng-bind="profile.age"/></blockquote>
+                </div>
+                <div class="col-md-3">
+                    <blockquote>Hair color: <div ng-bind="profile.hair_color"/></blockquote>
+                </div>
+                <div class="col-md-3">
+                    <blockquote>Weight: <div ng-bind="profile.weight"/></blockquote>
+                </div>
+                <div class="col-md-3">
+                    <blockquote>Height: <div ng-bind="profile.height"/></blockquote>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <blockquote>Friends</blockquote>
+                        <div ng-repeat="friend in profile.friends">
+                            {{friend}}
+                        </div>  
+                </div>
+                <div class="col-md-6">
+                        <blockquote>Professions</blockquote>
+                        <div ng-repeat="profession in profile.professions">
+                            {{profession}}
+                        </div>       
+                </div>
+            </div>
+        </div>    
+        <div class="modal-footer">
+            <button class="btn btn-success" ng-click="ok()">Ok</button>
+            <button class="btn" ng-click="cancel()">Cancel</button>
+        </div>
+
+          <!--div class="modal-header">
+	          <h4>Friends</h4>
+	      </div>
+	      <div class="modal-body">
+	    	<div ng-repeat="individualFriend in individualFriends">
+				{{individualFriend}}
+			</div>	
+            <div ng-repeat="individualProfession in individualProfessions">
+                {{individualProfession}}
+            </div>
+	      </div>
+     	 <div class="modal-footer">
+	        <button class="btn btn-success" ng-click="ok()">Ok</button>
+	        <button class="btn" ng-click="cancel()">Cancel</button>
+    	</div-->
+	</div>
+</div>
+<link rel="stylesheet" href="css/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="css/styles.css"></link>
+<script src="dist/jquery-1.11.3.min.js"></script>
+<script src="dist/angular.min.js"></script>
+<script src="dist/angular-aria.min.js"></script>
+<script src="dist/angular-messages.min.js"></script>
+<script src="dist/pagination.min.js"></script>
+<script src="dist/dataGrid.min.js"></script>
+<script src="js/underscore-min.js"></script>
+<script src="js/ui-bootstrap-tpls-2.5.0.js"></script>
+<script src="js/angular-ui-bootstrap-modal.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>
