@@ -3,7 +3,7 @@ angular.module('altranModule', [])
 .controller('altranController', ['$scope', 'altranFactory', '$cacheFactory', '$locale', function($scope, altranFactory, $cacheFactory, $locale) {
 
  	$scope.keys = [];
-  	$scope.cache = $cacheFactory('altranCache');
+  $scope.cache = $cacheFactory('altranCache');
   	
 	$scope.put = function(key) {
 	    if (angular.isUndefined($scope.cache.get(key))) {
@@ -37,17 +37,9 @@ angular.module('altranModule', [])
 .directive('myCard', function() {
   return {
   	scope: {
-  		 id:                '@',
- 		 name: 				'@',
- 		 thumbnail: 		'@',
- 		 hairColor: 		'@',
- 		 height: 			'@',
- 		 weight: 			'@',
- 		 age:           	'@',
- 		 professionsCount: 	'@',
- 		 friendsCount: 		'@'
-	},
-	templateUrl: 'templates/card.html'
+       people: '='
+	   },
+	   templateUrl: 'templates/card.html'
   };
 })
 .directive('myFilters', function() {
