@@ -1,18 +1,25 @@
-angular.module('brastlewarkApp', [, 'ui.bootstrap.modal', 'ui.bootstrap', 'dataGrid', 'pagination'])
-    .controller('brastlewarkAppController', ['$scope', 'brastlewarkFactory', '$filter', function ($scope, brastlewarkFactory, $filter) {
 
-        $scope.gridOptions = {
-            data: [],
-            urlSync: true
-        };
+angular.module('altranModule', [])
+.controller('altranController', ['$scope', 'altranFactory', '$cacheFactory', '$locale', function($scope, altranFactory, $cacheFactory, $locale) {
 
-        brastlewarkFactory.getData().then(function (responseData) {
-           $scope.population=responseData.data.Brastlewark;
-           $scope.gridOptions.data = $scope.population;
-           $scope.loadFilters();
-        });
-
-	    $scope.loadFilters = function() {
+ 	$scope.keys = [];
+  	$scope.cache = $cacheFactory('altranCache');
+  	
+	$scope.put = function(key) {
+	    if (angular.isUndefined($scope.cache.get(key))) {
+	   		$scope.keys.push(key);
+	   		altranFactory.getData().then(function (responseData) {
+	        	$scope.population=responseData.data.Brastlewark;       
+	        	$scope.cache.put(key, angular.isUndefined($scope.population) ? null : $scope.population);	
+	        	$scope.loadFilters();	        	
+	    	});	   
+	   	} else{
+			$scope.population=$scope.cache.get(key);
+			$scope.loadFilters();
+		}
+  	};
+	
+    $scope.loadFilters = function() {
 	        var _professions=[];
 	       
 	        $scope.professions=[];
@@ -23,32 +30,64 @@ angular.module('brastlewarkApp', [, 'ui.bootstrap.modal', 'ui.bootstrap', 'dataG
 	        });
 
 	        $scope.professions.push(_.union(_.flatten(_professions)));   
-	    };
+    };
+   
+    $scope.put('altranCache');
+}])
+.directive('myCard', function() {
+  return {
+  	scope: {
+  		 id:                '@',
+ 		 name: 				'@',
+ 		 thumbnail: 		'@',
+ 		 hairColor: 		'@',
+ 		 height: 			'@',
+ 		 weight: 			'@',
+ 		 age:           	'@',
+ 		 professionsCount: 	'@',
+ 		 friendsCount: 		'@'
+	},
+	templateUrl: 'templates/card.html'
+  };
+})
+.directive('myFilters', function() {
+  return {
+  	templateUrl: 'templates/filters.html'
+  };
+})
+.filter('numberEx', ['numberFilter', '$locale',
+  function(number, $locale) {
 
-        $scope.open = function(_item) {
-        	$scope.profile={};
-        	$scope.profile=_item;
-            $scope.showModal = true;
-		};
+    var formats = $locale.NUMBER_FORMATS;
+    return function(input, fractionSize) {
+      //Get formatted value
+      var formattedValue = number(input, fractionSize);
 
-	  	$scope.ok = function() {
-	   	 	$scope.showModal = false;
-	  	};
+      //get the decimalSepPosition
+      var decimalIdx = formattedValue.indexOf(formats.DECIMAL_SEP);
 
-	  	$scope.cancel = function() {
-	    	$scope.showModal = false;
-	  	};	  	
+      //If no decimal just return
+      if (decimalIdx == -1) return formattedValue;
 
 
-    }])
-    .factory('brastlewarkFactory', function ($http) {
-        return {
-            getData: function () {
-                return $http({
-                    method: 'GET',
-                    url: 'https://raw.githubusercontent.com/rrafols/mobile_test/master/data.json',
-                    cache: true
-                });
-            }
+      var whole = formattedValue.substring(0, decimalIdx);
+      var decimal = (Number(formattedValue.substring(decimalIdx)) || "").toString();
+
+      return whole +  decimal.substring(1);
+    };
+  }
+])
+.factory('altranFactory', function ($http) {
+    return {
+        getData: function () {
+        	return $http({
+                method: 'GET',
+                //url: 	'https://raw.githubusercontent.com/rrafols/mobile_test/master/data.json',
+                url: 	'json/data.json',
+                cache: true
+            });
         }
-    });
+    }
+});
+
+

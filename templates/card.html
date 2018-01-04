@@ -1,0 +1,47 @@
+ 
+
+<div class="panel panel-primary"><div class="panel-heading">{{name}}</div>
+<div class="panel-body">
+	<img class="lazy" ng-src="{{thumbnail}}">	
+	<div ng-show="showDetail">
+		<div class="container-fluid" style="position: relative; left:-10px;">
+		    <div class="row row-card">
+		        <div class="col-md-5">
+		            <font class="font-card">Age: {{age}}</font>
+		        </div>
+		        <div class="col-md-7">
+		            <font class="font-card">Hair color: {{hairColor}}</font>
+		        </div>
+		    </div>
+		    <div class="row row-card">
+		        <div class="col-md-5">
+		            <font class="font-card">Weight: {{weight | numberEx:2}}</font>
+		        </div>
+		        <div class="col-md-7">
+		            <font class="font-card">Height: {{height | numberEx:2}}</font>
+		        </div>
+		    </div>
+		    <div class="row row-card">
+		        <div class="col-md-6">
+		            <blockquote>Friends</blockquote>
+		                <div ng-repeat="friend in friends">
+		                    {{friend}}
+		                </div>  
+		        </div>
+		        <div class="col-md-6">
+		                <blockquote>Professions</blockquote>
+		                <div ng-repeat="profession in professions">
+		                    {{profession}}
+		                </div>       
+		        </div>
+		    </div>
+		</div> 			
+		<button ng-show="showDetail" ng-click="showDetail = !showDetail">Hide details</button>
+	</div>
+</div>
+<div class="panel-footer" ng-show="!showDetail">
+	<div>{{friendsCount}} friends</div> 
+	<div>{{professionsCount}} professions</div>
+</div>
+<button ng-show="!showDetail" ng-click="showDetail = !showDetail">More details</button>
+

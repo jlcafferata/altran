@@ -1,15 +1,31 @@
 img.lazy{
 	width: 	100%; 
-	height: 10em;
+	height: 15em;
 }
 
 * {
 	font-family: 'Amaranth', sans-serif;	
 }
 
+.font-card{
+	font-size:13px;
+}
+
+.row-card{
+	width: 120%;
+    margin-top: 10px
+}
+
+
+
 .jumbotron {
-  margin-top: 	 -5px; 	
-  margin-bottom: 15px;
+  margin-top: 	 -30px; 	
+  margin-bottom: 12px;
+}
+
+.jumbotron {
+    padding-top: 36px;
+    padding-bottom: 0px;
 }
 
 footer {   
