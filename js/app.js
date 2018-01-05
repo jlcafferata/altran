@@ -20,15 +20,26 @@ angular.module('altranModule', [])
   	};
 	
     $scope.loadFilters = function() {
-	        var _professions=[];
+	        var _professions=[],
+              _highLevelOfPopularity=0,
+              _highLevelOfQualification=0;
 	       
 	        $scope.professions=[];
-	    
+          
 	    	_professions.push('');
 	        _.each($scope.population, function(model){
-	            _professions.push(model.professions);
+             model.professions_count=model.professions.length;
+             model.friends_count=model.friends.length;
+             if(model.friends_count>_highLevelOfPopularity){
+              _highLevelOfPopularity=model.friends_count;
+             }  
+             if(model.professions_count>_highLevelOfQualification){
+              _highLevelOfQualification=model.professions_count;
+             }              
+             _professions.push(model.professions);
 	        });
-
+          $scope.highLevelOfPopularity=_highLevelOfPopularity;
+          $scope.highLevelOfQualification=_highLevelOfQualification;
 	        $scope.professions.push(_.union(_.flatten(_professions)));   
     };
    

@@ -1,3 +1,4 @@
+
 <div class="panel panel-primary"><div class="panel-heading">{{people.name}}</div>
 <div class="panel-body">
 	<img class="lazy" ng-src="{{people.thumbnail}}">	
@@ -39,10 +40,10 @@
 	</div>
 </div>
 <div class="panel-footer">
-	<div>{{people.friends.length}} friends</div> 
-	<div>{{people.professions.length}} professions</div>
+	<div>{{people.friends_count}} friends</div> 
+	<div>{{people.professions_count}} professions</div>
 	<button style="position: relative; float: right; margin-bottom: 5px;" ng-click="showDetail = !showDetail">
-	<span ng-if="!showDetail">More details</span><span ng-if="showDetail">Hide details</span>
+	<span ng-if="!showDetail"><i class="fa fa-plus" aria-hidden="true"></i></span><span ng-if="showDetail"><i class="fa fa-minus" aria-hidden="true"></i></span>
 	</button>
 </div>
 
