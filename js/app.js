@@ -20,32 +20,33 @@ angular.module('altranModule', [])
   	};
 	
     $scope.loadFilters = function() {
-	        var _professions=[],
-              _highLevelOfPopularity=0,
-              _highLevelOfQualification=0;
-	       
-	        $scope.professions=[];
+	       var _professions=[];
+
+	       $scope.professions=[];
           
-	    	_professions.push('');
-	        _.each($scope.population, function(model){
-             model.professions_count=model.professions.length;
-             model.friends_count=model.friends.length;
-             if(model.friends_count>_highLevelOfPopularity){
-              _highLevelOfPopularity=model.friends_count;
-             }  
-             if(model.professions_count>_highLevelOfQualification){
-              _highLevelOfQualification=model.professions_count;
-             }              
+         $scope.highLevelOfQualification=_.max($scope.population, function(people){ return people.professions.length;});
+         $scope.highLevelOfPopularity=_.max($scope.population, function(people){ return people.friends.length;});
+
+          _.each($scope.population, function(model){
+            model.popularity_score=Math.round((parseFloat(_.isUndefined(model.friends)?0:model.friends.length)/parseFloat($scope.highLevelOfPopularity.friends.length)) * 100);
+            model.qualification_score=Math.round((parseFloat(_.isUndefined(model.professions)?0:model.professions.length)/parseFloat($scope.highLevelOfQualification.professions.length)) * 100);
              _professions.push(model.professions);
-	        });
-          $scope.highLevelOfPopularity=_highLevelOfPopularity;
-          $scope.highLevelOfQualification=_highLevelOfQualification;
-	        $scope.professions.push(_.union(_.flatten(_professions)));   
+          });
+
+           $scope.professions.push(_.sortBy(
+                _.union(
+                    _.flatten(_professions)
+                )
+              ), 
+              function(texto){return texto;}
+           );   
+         
+	    	 
     };
    
     $scope.put('altranCache');
 }])
-.directive('myCard', function() {
+.directive('card', function() {
   return {
   	scope: {
        people: '='
@@ -53,7 +54,7 @@ angular.module('altranModule', [])
 	   templateUrl: 'templates/card.html'
   };
 })
-.directive('myFilters', function() {
+.directive('filters', function() {
   return {
   	templateUrl: 'templates/filters.html'
   };
@@ -63,15 +64,11 @@ angular.module('altranModule', [])
 
     var formats = $locale.NUMBER_FORMATS;
     return function(input, fractionSize) {
-      //Get formatted value
       var formattedValue = number(input, fractionSize);
 
-      //get the decimalSepPosition
       var decimalIdx = formattedValue.indexOf(formats.DECIMAL_SEP);
 
-      //If no decimal just return
       if (decimalIdx == -1) return formattedValue;
-
 
       var whole = formattedValue.substring(0, decimalIdx);
       var decimal = (Number(formattedValue.substring(decimalIdx)) || "").toString();
@@ -80,6 +77,14 @@ angular.module('altranModule', [])
     };
   }
 ])
+.filter('scoring', function(){
+    return function(number){
+      if(number==0) return 'btn btn-danger fa fa-thumbs-o-down';
+      if(number>0 && number<=25) return 'btn fa fa-thumbs-o-down';
+      if(number>25 && number <=50) return 'btn fa fa-thumbs-o-up';
+      else return 'btn btn-success fa fa-thumbs-o-up';
+    }
+})
 .factory('altranFactory', function ($http) {
     return {
         getData: function () {
