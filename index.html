@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
   <title>Brastlewark population finder</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,10 +13,13 @@
   <script src="js/resources/bootstrap.min.js"></script>
   <script src="js/resources/underscore-min.js"></script>
   <script src="js/resources/angular.min.js"></script>
-  <script src="js/app.js"></script>
   <script src="js/resources/lazyload.min.js"></script> 
-  
-  
+
+  <script src="js/altran_services.js"></script>
+  <script src="js/altran_controller.js"></script>
+  <script src="js/altran_directives.js"></script>
+  <script src="js/altran_filters.js"></script>
+
   <script type="text/javascript" charset="utf-8">
     $(function() {
      $("img.lazy").lazyload();     
@@ -30,13 +32,12 @@
       <h1 style="color:#337ab7">Brastlewark</h1>
       <div filters id="divFilters" style="display:none"></div>
       <i id="divImgLoading" class="fa fa-spinner fa-spin fa-3x fa-fw" aria-hidden="true"></i> 
-
     </div>
   </div>
  
   <div class="container">    
     <div class="row">      
-      <div card class="col-sm-4" 
+      <div card class="col-md-4 card" 
            ng-repeat="people in filtered = (population | filter: searchFilter) | limitTo:selectQuantity" 
            people="people"/>
     </div>
@@ -46,7 +47,6 @@
   </footer>
 
 </body>
-
  <script type="text/javascript">
     $(document).ready(function(){
       setTimeout(function(){

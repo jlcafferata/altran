@@ -19,7 +19,7 @@ img.lazy{
 
 
 .jumbotron {
-  margin-top: 	 -30px; 	
+  margin-top: 	 13px; 	
   margin-bottom: 12px;
 }
 
@@ -28,10 +28,10 @@ img.lazy{
     padding-bottom: 0px;
 }
 
-footer {   
+/*footer {   
   background-color: #f2f2f2;
   padding: 25px;
-}
+}*/
 
 h1 {
 	font-size: 50px;
@@ -43,4 +43,22 @@ h1 {
 input[type="text"],
 select{
 	height: 30px;
+}
+
+.card{
+	position: relative;
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	-ms-flex-direction: column;
+	flex-direction: column;
+	min-width: 0;
+	word-wrap: break-word;
+	background-color: #fff;
+	background-clip: border-box;
+	border: 1px solid rgba(0,0,0,.125);
+	border-radius: .25rem;
+	padding: 5px;
 }
