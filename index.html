@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Api rest full consumer</title>
+  <title>Brastlewark population finder</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="css/resources/bootstrap.min.css" rel="stylesheet">
@@ -13,67 +13,48 @@
   <script src="js/resources/bootstrap.min.js"></script>
   <script src="js/resources/underscore-min.js"></script>
   <script src="js/resources/angular.min.js"></script>
- 
+  <script src="js/resources/lazyload.min.js"></script> 
 
-  
-  <script src="js/altran.api.module.js"></script>
-  <script src="js/altran.api.services.js"></script>
-  <script src="js/altran.api.controller.js"></script>
- 
-  
+  <script src="js/altran.module.js"></script>
+  <script src="js/altran.controller.js"></script>
+  <script src="js/altran.directives.js"></script>
+  <script src="js/altran.filters.js"></script>
+
+  <script type="text/javascript" charset="utf-8">
+    $(function() {
+     $("img.lazy").lazyload();     
+    });    
+  </script>
 </head>
-<body ng-app="apiConsumer" ng-controller="apiConsumerController">
-  <div class="container">    
-    
-    <div class="row" ng-show="isNeedToLogin">      
-      <h1>Login</h1>
-      <div class="container-fluid">
-        <form ng-submit="login()" method="post">
-          Name: <input type="text" ng-model="userName" placeholder="user name" size="50"/>
-          Email: <input type="email" ng-model="email" placeholder="your-mail@server.com" size="70"/>
-          <button ng-type="submit">Login </button>
-        </form>
-      </div>
-      <br/>
-      <pre>{{message}}</pre>
-    </div>
-
-    <div class="row" ng-show="!isNeedToLogin"> 
-      <h3>Filter by</h3>
-      <select id="filterBy" ng-model="filterBy">
-        <option value="name">Name</option>
-        <option value="id">User Id</option>
-        <option value="number">Policy number</option>
-      </select>
-      <h3>Value of filter</h3>
-      <input type="text" id="filterValue" ng-model="filterValue" size="70">
-      <button ng-click="filterUser()">Find User Detail</button>
-      <button ng-click="filterPolicies()" ng-show="filterBy!='id'">Find User Policies</button>
-      <br/>
-
-      <div ng-repeat="user in users">
-          {{user.name}}
-          {{user.email}}
-          {{user.id}}
-      </div>
-
-      <div ng-repeat="policy in policies">
-          {{policy.id}}
-          {{policy.amountInsured}}
-          {{policy.inceptionDate}}
-          {{policy.installmentPayment}}
-      </div>
-      
-      <br/>
-      <pre>
-        {{users | json}}
-        {{policies | json}}
-        {{message}}
-      </pre>
-
+<body ng-app="altranModule" ng-controller="altranController">
+  <div class="jumbotron">
+    <div class="container text-center">
+      <h1 style="color:#337ab7">Brastlewark</h1>
+      <div filters id="divFilters" style="display:none"></div>
+      <i id="divImgLoading" class="fa fa-spinner fa-spin fa-3x fa-fw" aria-hidden="true"></i> 
     </div>
   </div>
-  
+ 
+  <div class="container">    
+    <div class="row">      
+      <div card class="col-md-4 card" 
+           ng-repeat="people in filtered = (population | filter: searchFilter) | limitTo:selectQuantity" 
+           people="people"/>
+    </div>
+  </div>
+  <footer class="container-fluid text-center">
+    <p>Brastlewark population finder</p>      
+  </footer>
+
 </body>
+ <script type="text/javascript">
+    $(document).ready(function(){
+      setTimeout(function(){
+        $("#divImgLoading").hide('slow');  
+        $("#divFilters").show('slow');
+      }, 1000);      
+    });
+  </script>
+
 </html>
 
