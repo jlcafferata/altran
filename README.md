@@ -1,6 +1,6 @@
 Altran
 
-Responsive application made with Angular 1.6, which interacts with local data or with data from a remote URL.
+Responsive web application made with Angular 1.6, which interacts with local data or with data from a remote URL.
 
 The project has all the necessary resources packaged for its operation, including the data that is accessed (data.json).
 
